@@ -23,7 +23,7 @@
     <!-- #endif -->
 
     <!-- http://localhost:9000/#/pages/index/request -->
-    <wd-button @click="run" class="my-6">发送请求</wd-button>
+    <sar-button @click="run" class="my-6">发送请求</sar-button>
     <view class="h-16">
       <view v-if="loading">loading...</view>
       <block v-else>
@@ -31,7 +31,7 @@
         <view class="text-green leading-8">{{ JSON.stringify(data) }}</view>
       </block>
     </view>
-    <wd-button type="error" @click="reset" class="my-6" :disabled="!data">重置数据</wd-button>
+    <sar-button theme="danger" @click="reset" class="my-6" :disabled="!data">重置数据</sar-button>
   </view>
 </template>
 
