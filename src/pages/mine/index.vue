@@ -87,14 +87,12 @@
 
 <script lang="ts" setup>
 import { useUserStore } from '@/store'
-import { useToast } from 'wot-design-uni'
+import { toast } from 'sard-uniapp'
 import { uploadFileUrl, useUpload } from '@/utils/uploadFile'
-import { storeToRefs } from 'pinia'
 import { IUploadSuccessInfo } from '@/api/login.typings'
 
 const userStore = useUserStore()
 
-const toast = useToast()
 const hasLogin = ref(false)
 
 onShow((options) => {
@@ -192,7 +190,7 @@ const handleAppUpdate = () => {
   })
   updateManager.onUpdateFailed(function (res) {
     // 新的版本下载失败
-    toast.error('新版本下载失败')
+    toast.fail('新版本下载失败')
   })
   // #endif
   // #endif
@@ -220,7 +218,7 @@ const handleClearCache = () => {
           toast.success('清除缓存成功')
         } catch (err) {
           console.error('清除缓存失败:', err)
-          toast.error('清除缓存失败')
+          toast.fail('清除缓存失败')
         }
       }
     },

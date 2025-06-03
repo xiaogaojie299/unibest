@@ -179,5 +179,8 @@ export default async ({ command, mode }) => {
         },
       },
     },
+    optimizeDeps: {
+      exclude: ['sard-uniapp'],
+    },
   })
 }

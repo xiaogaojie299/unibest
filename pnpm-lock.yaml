@@ -80,12 +80,12 @@ importers:
       qs:
         specifier: 6.5.3
         version: 6.5.3
+      sard-uniapp:
+        specifier: ^1.17.1
+        version: 1.17.1(@dcloudio/types@3.4.14)(vue@3.5.15(typescript@5.7.2))
       vue:
         specifier: ^3.5.15
         version: 3.5.15(typescript@5.7.2)
-      wot-design-uni:
-        specifier: ^1.9.1
-        version: 1.9.1(vue@3.5.15(typescript@5.7.2))
       z-paging:
         specifier: ^2.8.4
         version: 2.8.4
@@ -4641,6 +4641,13 @@ packages:
   safer-buffer@2.1.2:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
 
+  sard-uniapp@1.17.1:
+    resolution: {integrity: sha512-XbBM0hQ777nmV+PjRlmjpH6ZihUhSTDXlDZju2QOLrXmwn5uVICw4YcOgAo6qzKp7nDtmM6pTSmQIUlILdn3pg==}
+    engines: {HBuilderX: ^3.6.0}
+    peerDependencies:
+      '@dcloudio/types': ^3.4.8
+      vue: ^3.3.13
+
   sass@1.77.8:
     resolution: {integrity: sha512-4UHg6prsrycW20fqLGPShtEvo/WyHRVRHwOP4DzkUrObWoWI05QBSfzU71TVB7PFaL104TwNaHpjlWXAZbQiNQ==}
     engines: {node: '>=14.0.0'}
@@ -5228,12 +5235,6 @@ packages:
     resolution: {integrity: sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA==}
     engines: {node: '>= 8'}
     hasBin: true
-
-  wot-design-uni@1.9.1:
-    resolution: {integrity: sha512-bZBt6xt5HfvmHBm76BZWBrvthHKeK7cbR//bbmv2ICjPRLXvD9KKHGZDZrq6C/j+DXHzA4UbcGer3iE8XcuVkw==}
-    engines: {HBuilderX: ^3.8.7}
-    peerDependencies:
-      vue: '>=3.2.47'
 
   wrap-ansi@7.0.0:
     resolution: {integrity: sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==}
@@ -11083,6 +11084,11 @@ snapshots:
 
   safer-buffer@2.1.2: {}
 
+  sard-uniapp@1.17.1(@dcloudio/types@3.4.14)(vue@3.5.15(typescript@5.7.2)):
+    dependencies:
+      '@dcloudio/types': 3.4.14
+      vue: 3.5.15(typescript@5.7.2)
+
   sass@1.77.8:
     dependencies:
       chokidar: 3.6.0
@@ -11708,10 +11714,6 @@ snapshots:
   which@2.0.2:
     dependencies:
       isexe: 2.0.0
-
-  wot-design-uni@1.9.1(vue@3.5.15(typescript@5.7.2)):
-    dependencies:
-      vue: 3.5.15(typescript@5.7.2)
 
   wrap-ansi@7.0.0:
     dependencies:
