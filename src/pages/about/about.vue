@@ -9,6 +9,7 @@
 
 <template>
   <view>
+    <mpDevBubble />
     <fg-navbar>关于</fg-navbar>
     <view
       class="bg-white overflow-hidden pt-2 px-4"

@@ -44,6 +44,26 @@
       }
     ]
   },
+  "subPackages": [
+    {
+      "root": "devTools/page",
+      "pages": [
+        {
+          "path": "index",
+          "style": {
+            "navigationStyle": "custom",
+            "softinputMode": "adjustResize",
+            "animationDuration": 1,
+            "animationType": "none",
+            "popGesture": "none",
+            "bounce": "none",
+            "titleNView": false
+          }
+        }
+      ]
+    }
+  ],
+  "__esModule": true,
   "pages": [
     {
       "path": "pages/index/index",
@@ -97,6 +117,5 @@
         "navigationBarTitleText": "修改密码"
       }
     }
-  ],
-  "subPackages": []
+  ]
 }

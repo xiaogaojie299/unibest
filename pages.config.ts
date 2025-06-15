@@ -48,4 +48,26 @@ export default defineUniPages({
       },
     ],
   },
+  subPackages: [
+    {
+      root: 'devTools/page',
+      pages: [
+        {
+          path: 'index',
+          style: {
+            navigationStyle: 'custom',
+            // #ifdef APP-PLUS
+            softinputMode: 'adjustResize',
+            // backgroundColor: 'transparent',
+            animationDuration: 1,
+            animationType: 'none',
+            popGesture: 'none',
+            bounce: 'none',
+            titleNView: false,
+            // #endif
+          },
+        },
+      ],
+    },
+  ],
 })
