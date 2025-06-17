@@ -2,9 +2,9 @@
   "globalStyle": {
     "navigationStyle": "default",
     "navigationBarTitleText": "unibest",
-    "navigationBarBackgroundColor": "#f8f8f8",
+    "navigationBarBackgroundColor": "#ffffff",
     "navigationBarTextStyle": "black",
-    "backgroundColor": "#FFFFFF"
+    "backgroundColor": "#f4f4f4"
   },
   "easycom": {
     "autoscan": true,
@@ -29,12 +29,6 @@
         "selectedIconPath": "static/tabbar/homeHL.png",
         "pagePath": "pages/index/index",
         "text": "首页"
-      },
-      {
-        "iconPath": "static/tabbar/example.png",
-        "selectedIconPath": "static/tabbar/exampleHL.png",
-        "pagePath": "pages/about/about",
-        "text": "关于"
       },
       {
         "iconPath": "static/tabbar/personal.png",
@@ -62,6 +56,22 @@
       }
     },
     {
+      "path": "pages/login/agreement",
+      "type": "page",
+      "style": {
+        "navigationBarTitleText": "隐私协议",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/login/index copy",
+      "type": "page",
+      "style": {
+        "navigationBarTitleText": "登录",
+        "navigationStyle": "custom"
+      }
+    },
+    {
       "path": "pages/login/index",
       "type": "page",
       "style": {
@@ -70,10 +80,40 @@
       }
     },
     {
-      "path": "pages/mine/index",
+      "path": "pages/mine/index copy",
       "type": "page",
       "style": {
         "navigationBarTitleText": "我的"
+      }
+    },
+    {
+      "path": "pages/mine/index",
+      "type": "page",
+      "style": {
+        "navigationBarTitleText": "我的",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/park/change-park",
+      "type": "page",
+      "style": {
+        "navigationBarTitleText": "选择园区"
+      }
+    },
+    {
+      "path": "pages/index/prefect-org/index",
+      "type": "page",
+      "style": {
+        "navigationBarTitleText": "完善组织信息"
+      }
+    },
+    {
+      "path": "pages/index/score/index",
+      "type": "page",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "创新积分"
       }
     },
     {
@@ -88,6 +128,20 @@
       "type": "page",
       "style": {
         "navigationBarTitleText": "个人资料"
+      }
+    },
+    {
+      "path": "pages/mine/org/add",
+      "type": "page",
+      "style": {
+        "navigationBarTitleText": "查找组织"
+      }
+    },
+    {
+      "path": "pages/mine/org/index",
+      "type": "page",
+      "style": {
+        "navigationBarTitleText": "我的组织"
       }
     },
     {

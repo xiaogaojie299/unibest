@@ -11,11 +11,14 @@ export const http = <T>(options: CustomRequestOptions) => {
       // #endif
       // 响应成功
       success(res) {
+        let statusCode = res.data?.code
+        let message = res.data?.msg
+
         // 状态码 2xx，参考 axios 的设计
-        if (res.statusCode >= 200 && res.statusCode < 300) {
+        if (statusCode >= 200 && statusCode < 300) {
           // 2.1 提取核心数据 res.data
           resolve(res.data as IResData<T>)
-        } else if (res.statusCode === 401) {
+        } else if (statusCode === 401) {
           // 401错误  -> 清理用户信息，跳转到登录页
           // userStore.clearUserInfo()
           // uni.navigateTo({ url: '/pages/login/login' })
@@ -25,7 +28,7 @@ export const http = <T>(options: CustomRequestOptions) => {
           !options.hideErrorToast &&
             uni.showToast({
               icon: 'none',
-              title: (res.data as IResData<T>).msg || '请求错误',
+              title: message || '请求错误',
             })
           reject(res)
         }

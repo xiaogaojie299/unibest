@@ -4,9 +4,9 @@ export default defineUniPages({
   globalStyle: {
     navigationStyle: 'default',
     navigationBarTitleText: 'unibest',
-    navigationBarBackgroundColor: '#f8f8f8',
+    navigationBarBackgroundColor: '#ffffff',
     navigationBarTextStyle: 'black',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#f4f4f4',
   },
   easycom: {
     autoscan: true,
@@ -33,12 +33,6 @@ export default defineUniPages({
         selectedIconPath: 'static/tabbar/homeHL.png',
         pagePath: 'pages/index/index',
         text: '首页',
-      },
-      {
-        iconPath: 'static/tabbar/example.png',
-        selectedIconPath: 'static/tabbar/exampleHL.png',
-        pagePath: 'pages/about/about',
-        text: '关于',
       },
       {
         iconPath: 'static/tabbar/personal.png',

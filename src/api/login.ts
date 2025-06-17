@@ -24,14 +24,14 @@ export const getCode = () => {
  * @param loginForm 登录表单
  */
 export const login = (loginForm: ILoginForm) => {
-  return http.post<IUserLogin>('/user/login', loginForm)
+  return http.post<IUserLogin>('/auth/codeLogin', loginForm)
 }
 
 /**
  * 获取用户信息
  */
 export const getUserInfo = () => {
-  return http.get<IUserInfoVo>('/user/info')
+  return http.post<IUserInfoVo>('/program/profile/user-info')
 }
 
 /**
@@ -79,5 +79,5 @@ export const getWxCode = () => {
  * @returns Promise 包含登录结果
  */
 export const wxLogin = (data: { code: string }) => {
-  return http.post<IUserLogin>('/user/wxLogin', data)
+  return http.post<IUserLogin>('/auth/wx-login-one', data)
 }

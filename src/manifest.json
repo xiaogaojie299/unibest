@@ -1,5 +1,5 @@
 {
-  "name": "unibest",
+  "name": "xindukechuang",
   "appid": "__UNI__D1E5001",
   "description": "",
   "versionName": "1.0.0",
@@ -83,7 +83,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxa2abb91f64032a2b",
+    "appid": "wx25db1df1fc2f5c6e",
     "setting": {
       "urlCheck": false,
       "es6": true,

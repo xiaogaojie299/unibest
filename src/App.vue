@@ -58,4 +58,12 @@ image {
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
 }
+
+.page-container {
+  background-color: $uni-bg-color-grey;
+  min-height: 100vh;
+}
+.page-theme-bg {
+  background-color: $uni-bg-color-grey;
+}
 </style>

@@ -13,81 +13,32 @@
     <view class="bg-decoration bg-circle-2"></view>
     <view class="bg-decoration bg-circle-3"></view>
 
-    <view class="login-header">
-      <image class="login-logo" :src="appLogo" mode="aspectFit"></image>
-      <view class="login-title">{{ appTitle }}</view>
-    </view>
+    <view class="login-header"></view>
     <view class="login-form">
-      <view class="welcome-text">欢迎登录</view>
-      <view class="login-desc">请输入您的账号和密码</view>
-      <view class="login-input-group">
-        <view class="input-wrapper">
-          <wd-input
-            v-model="loginForm.mobile"
-            prefix-icon="user"
-            placeholder="请输入手机号"
-            clearable
-            class="login-input"
-            :border="false"
-            :maxlength="11"
-            required
-          ></wd-input>
-          <view class="input-bottom-line"></view>
-        </view>
-        <!-- 验证码区域 -->
-        <view class="input-wrapper captcha-wrapper">
-          <wd-input
-            v-model="loginForm.code"
-            prefix-icon="secured"
-            placeholder="请输入验证码"
-            clearable
-            class="login-input captcha-input"
-            :border="false"
-            required
-          >
-            <template #suffix>
-              <image
-                class="captcha-image"
-                :src="'data:image/gif;base64,' + captcha.image"
-                mode="aspectFit"
-                @click="refreshCaptcha"
-              ></image>
-            </template>
-          </wd-input>
-          <view class="input-bottom-line"></view>
-        </view>
+      <view class="login-header">
+        <image class="login-logo" :src="appLogo" mode="aspectFit"></image>
+        <view class="login-title ml-2">新都科创</view>
       </view>
+
       <!-- 登录按钮组 -->
       <view class="login-buttons">
-        <!-- 账号密码登录按钮 -->
         <wd-button
-          type="primary"
+          type="success"
           size="large"
           block
-          @click="handleAccountLogin"
-          class="account-login-btn"
-        >
-          <wd-icon name="right" size="18px" class="login-icon"></wd-icon>
-          登录
-        </wd-button>
-        <!-- 微信小程序一键登录按钮 -->
-        <!-- #ifdef MP-WEIXIN -->
-        <view class="divider">
-          <view class="divider-line"></view>
-          <view class="divider-text">或</view>
-          <view class="divider-line"></view>
-        </view>
-        <wd-button
-          type="info"
-          size="large"
-          block
-          plain
           @click="handleWechatLogin"
           class="wechat-login-btn"
         >
-          微信一键登录
+          微信用户一键登录
         </wd-button>
-        <!-- #endif -->
+        <button
+          class="wechat-login-btn"
+          size="large"
+          open-type="getPhoneNumber"
+          @getphonenumber="onGetPhoneNumber"
+        >
+          授权手机号
+        </button>
       </view>
     </view>
     <!-- 隐私协议勾选 -->
@@ -100,13 +51,18 @@
       >
         <view class="agreement-text">
           我已阅读并同意
-          <text class="agreement-link" @click.stop="handleAgreement('user')">《用户协议》</text>
+          <text class="agreement-link" @click.stop="handleAgreement('user')">《用户使用协议》</text>
           和
           <text class="agreement-link" @click.stop="handleAgreement('privacy')">《隐私政策》</text>
         </view>
       </wd-checkbox>
     </view>
-    <view class="login-footer"></view>
+    <wd-message-box selector="wd-message-box-slot">
+      请您仔细阅读并充分理解相关条款，点击同意即代表您已阅读并同意
+      <text class="font-bold" @click.stop="handleAgreement('user')">《用户使用协议》</text>
+      与
+      <text class="font-bold" @click.stop="handleAgreement('privacy')">《隐私政策》</text>
+    </wd-message-box>
   </view>
 </template>
 
@@ -118,8 +74,13 @@ import { getCode, ILoginForm } from '@/api/login'
 import { toast } from '@/utils/toast'
 import { isTableBar } from '@/utils/index'
 import { ICaptcha } from '@/api/login.typings'
-const redirectRoute = ref('')
+import { http, httpGet } from '@/utils/http'
 
+import { useMessage } from 'wot-design-uni'
+
+const redirectRoute = ref('')
+const message = useMessage('wd-message-box-slot')
+const phoneNumber = ref<string | null>(null)
 // 获取环境变量
 const appTitle = ref(import.meta.env.VITE_APP_TITLE || 'Unibest Login')
 const appLogo = ref(import.meta.env.VITE_APP_LOGO || '/static/logo.svg')
@@ -139,11 +100,16 @@ const loginForm = ref<ILoginForm>({
   password: '123456',
   code: '',
   uuid: '',
-  mobile: '',
 })
 // 隐私协议勾选状态
-const agreePrivacy = ref(true)
+const agreePrivacy = ref(false)
 
+// 跳转到用户协议
+const handleToPrivacy = (type) => {
+  uni.navigateTo({
+    url: `/pages/login/agreement?type=${type}`,
+  })
+}
 // 页面加载完毕时触发
 onLoad((option) => {
   // 一进来就刷新验证码
@@ -154,39 +120,44 @@ onLoad((option) => {
   }
 })
 
-// 账号密码登录
-const handleAccountLogin = async () => {
-  // 表单验证
-  if (!loginForm.value.mobile) {
-    toast.error('请输入手机号')
+// 处理获取手机号事件
+const onGetPhoneNumber = async (e: any) => {
+  if (e.detail.errMsg !== 'getPhoneNumber:ok') {
+    console.error('获取手机号失败', e.detail.errMsg)
+    uni.showToast({ title: '获取手机号失败', icon: 'none' })
     return
   }
-  // 执行登录
+
+  const { encryptedData, iv } = e.detail
+
   try {
-    await userStore.login(loginForm.value)
-    // 跳转到首页或重定向页面
-    const targetUrl = redirectRoute.value || '/pages/index/index'
-    if (isTableBar(targetUrl)) {
-      uni.switchTab({ url: targetUrl })
-    } else {
-      uni.redirectTo({ url: targetUrl })
-    }
+    console.log('获取手机号成功', encryptedData, iv)
+    // 这里应该调用你自己的服务端接口解密手机号
+    const res = await uni.getUserInfo()
+    uni.showToast({ title: '获取成功', icon: 'success' })
+    phoneNumber.value = res.userInfo?.phoneNumber || '未知号码'
   } catch (error) {
-    console.error(error)
+    console.error('解密手机号失败', error)
+    uni.showToast({ title: '解密失败', icon: 'none' })
   }
-  return
 }
 
 // 微信登录
 const handleWechatLogin = async () => {
-  if (!isMpWeixin) {
-    toast.info('请在微信小程序中使用此功能')
-    return
-  }
-
   // 验证是否同意隐私协议
   if (!agreePrivacy.value) {
-    toast.error('请先阅读并同意用户协议和隐私政策')
+    message
+      .confirm({
+        title: '温馨提示',
+        confirmButtonText: '同意',
+        cancelButtonText: '取消',
+      })
+      .then(() => {
+        agreePrivacy.value = true
+      })
+      .catch((error) => {
+        console.log(error)
+      })
     return
   }
   // 微信登录
@@ -313,7 +284,6 @@ const handleAgreement = (type: 'user' | 'privacy') => {
 
 .login-header {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   margin-top: 120rpx;
@@ -343,8 +313,8 @@ const handleAgreement = (type: 'user' | 'privacy') => {
 }
 
 .login-form {
-  flex: 1;
   margin-top: 70rpx;
+  margin-bottom: 70rpx;
   animation: fadeIn 0.8s ease-out 0.2s both;
 
   .welcome-text {
@@ -436,6 +406,7 @@ const handleAgreement = (type: 'user' | 'privacy') => {
   }
 
   .login-buttons {
+    margin-top: 106rpx;
     display: flex;
     flex-direction: column;
     gap: 36rpx;
@@ -488,13 +459,13 @@ const handleAgreement = (type: 'user' | 'privacy') => {
     }
 
     .wechat-login-btn {
-      height: 96rpx;
       font-size: 32rpx;
-      color: #07c160;
+      color: #fff;
       border-color: #07c160;
       border-radius: 48rpx;
       transition: all 0.3s ease;
-
+      background-color: #09bb07;
+      width: 100%;
       .wechat-icon {
         margin-right: 12rpx;
       }
@@ -510,6 +481,7 @@ const handleAgreement = (type: 'user' | 'privacy') => {
 .privacy-agreement {
   display: flex;
   justify-content: center;
+  align-items: center;
   margin: 30rpx 0 40rpx;
   animation: fadeIn 0.8s ease-out 0.4s both;
 

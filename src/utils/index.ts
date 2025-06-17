@@ -197,3 +197,132 @@ export const getEnvBaseUploadUrl = () => {
 
   return baseUploadUrl
 }
+
+/**
+ * 递归添加层级字段
+ * @param data 数据数组
+ * @param level 当前层级，默认从 1 开始
+ */
+export function addLevelField(data: any[], level = 1) {
+  return data.map((item) => {
+    const newItem = { ...item, level } // 添加 level 字段
+    if (item.children && item.children.length > 0) {
+      newItem.children = addLevelField(item.children, level + 1) // 递归处理子级
+    }
+    return newItem
+  })
+}
+
+/**
+ * @description 构造树型结构数据，并添加 level 字段表示层级
+ * @param data 数据源
+ * @param id id字段 默认 'id'
+ * @param parentId 父节点字段 默认 'parentId'
+ * @param children 子节点字段 默认 'children'
+ * @param level 初始层级，默认从1开始
+ * @returns 构造完成的树结构，每个节点包含 level 字段
+ */
+export const handleTree = (
+  data: any[],
+  id?: string,
+  parentId?: string,
+  children?: string,
+  level: number = 1,
+): any => {
+  if (!Array.isArray(data)) {
+    console.warn('data must be an array')
+    return []
+  }
+
+  const config = {
+    id: id || 'id',
+    parentId: parentId || 'parentId',
+    childrenList: children || 'children',
+  }
+
+  const childrenMap: Record<string, any[]> = {}
+  const nodeMap: Record<string, any> = {}
+  const tree: any[] = []
+
+  // 初始化映射表并设置 level=1 的根节点
+  for (const d of data) {
+    const nodeId = d[config.id]
+    const parentKey = d[config.parentId]
+
+    if (!childrenMap[parentKey]) {
+      childrenMap[parentKey] = []
+    }
+    childrenMap[parentKey].push(d)
+
+    nodeMap[nodeId] = d
+
+    // 给当前节点赋初始 level
+    d[config.childrenList] = d[config.childrenList] || []
+    d.level = level
+  }
+
+  // 找出所有根节点（没有父节点的节点）
+  for (const d of data) {
+    const parentKey = d[config.parentId]
+    if (!nodeMap[parentKey]) {
+      tree.push(d)
+    }
+  }
+
+  // 递归给所有子节点添加 level 属性
+  function setLevel(node: any, currentLevel: number) {
+    node.level = currentLevel
+    if (childrenMap[node[config.id]]) {
+      childrenMap[node[config.id]].forEach((child) => setLevel(child, currentLevel + 1))
+    }
+  }
+
+  // 为整棵树设置层级
+  for (const root of tree) {
+    setLevel(root, level)
+  }
+
+  // 将子节点挂载到对应父节点上
+  for (const d of data) {
+    const parentId = d[config.parentId]
+    if (parentId && nodeMap[parentId]) {
+      if (!nodeMap[parentId][config.childrenList]) {
+        nodeMap[parentId][config.childrenList] = []
+      }
+      nodeMap[parentId][config.childrenList].push(d)
+    }
+  }
+
+  return tree
+}
+
+interface ModuleItem {
+  id: number
+  orgId: number
+  moduleType: number
+  name: string
+  tips: string | null
+  fieldType: number
+  configKey: number
+  submitValue: any
+  createTime: string
+  remark: string | null
+}
+
+type GroupedModules = Record<number, ModuleItem[]>
+
+/**
+ * 根据 moduleType 归类数据
+ * @param data 原始数据数组
+ * @returns 按 moduleType 分组的对象
+ */
+export function groupByModuleType(data: ModuleItem[]): GroupedModules {
+  return data.reduce((acc, item) => {
+    const key = item.moduleType
+    if (!acc[key]) {
+      acc[key] = []
+    }
+    acc[key].push(item)
+    return acc
+  }, {} as GroupedModules)
+}
