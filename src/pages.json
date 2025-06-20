@@ -16,7 +16,7 @@
   },
   "tabBar": {
     "color": "#999999",
-    "selectedColor": "#018d71",
+    "selectedColor": "#cfcaa0",
     "backgroundColor": "#F8F8F8",
     "borderStyle": "black",
     "height": "50px",
@@ -25,14 +25,14 @@
     "spacing": "3px",
     "list": [
       {
-        "iconPath": "static/tabbar/home.png",
-        "selectedIconPath": "static/tabbar/homeHL.png",
+        "iconPath": "static/tabbar/home-unselect.png",
+        "selectedIconPath": "static/tabbar/home-select.png",
         "pagePath": "pages/index/index",
         "text": "首页"
       },
       {
-        "iconPath": "static/tabbar/personal.png",
-        "selectedIconPath": "static/tabbar/personalHL.png",
+        "iconPath": "static/tabbar/mine-unselect.png",
+        "selectedIconPath": "static/tabbar/mine-select.png",
         "pagePath": "pages/mine/index",
         "text": "我的"
       }
@@ -44,7 +44,8 @@
       "type": "home",
       "style": {
         "navigationStyle": "custom",
-        "navigationBarTitleText": "首页"
+        "navigationBarTitleText": "首页",
+        "enablePullDownRefresh": true
       }
     },
     {
@@ -80,6 +81,13 @@
       }
     },
     {
+      "path": "pages/mine/edit-user-info",
+      "type": "page",
+      "style": {
+        "navigationBarTitleText": "我的信息"
+      }
+    },
+    {
       "path": "pages/mine/index copy",
       "type": "page",
       "style": {
@@ -98,7 +106,7 @@
       "path": "pages/park/change-park",
       "type": "page",
       "style": {
-        "navigationBarTitleText": "选择园区"
+        "navigationBarTitleText": "选择空间载体"
       }
     },
     {
@@ -113,7 +121,8 @@
       "type": "page",
       "style": {
         "navigationStyle": "custom",
-        "navigationBarTitleText": "创新积分"
+        "navigationBarTitleText": "创新积分",
+        "enablePullDownRefresh": true
       }
     },
     {
@@ -131,17 +140,65 @@
       }
     },
     {
+      "path": "pages/mine/org/add-callback",
+      "type": "page",
+      "style": {
+        "navigationBarTitleText": "已提交",
+        "navigationStyle": "custom"
+      }
+    },
+    {
       "path": "pages/mine/org/add",
       "type": "page",
       "style": {
-        "navigationBarTitleText": "查找组织"
+        "navigationBarTitleText": "企业认证"
+      }
+    },
+    {
+      "path": "pages/mine/org/callback",
+      "type": "page",
+      "style": {
+        "navigationBarTitleText": "已提交",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/mine/org/detail",
+      "type": "page",
+      "style": {
+        "navigationBarTitleText": "组织信息",
+        "navigationStyle": "custom"
       }
     },
     {
       "path": "pages/mine/org/index",
       "type": "page",
       "style": {
-        "navigationBarTitleText": "我的组织"
+        "navigationBarTitleText": "我的组织",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/mine/org/join-select-org",
+      "type": "page",
+      "style": {
+        "navigationBarTitleText": "选择组织"
+      }
+    },
+    {
+      "path": "pages/mine/org/join",
+      "type": "page",
+      "style": {
+        "navigationBarTitleText": "查找组织",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/mine/org/search",
+      "type": "page",
+      "style": {
+        "navigationBarTitleText": "查找组织",
+        "navigationStyle": "custom"
       }
     },
     {

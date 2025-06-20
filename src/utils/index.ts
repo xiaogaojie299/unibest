@@ -326,3 +326,19 @@ export function groupByModuleType(data: ModuleItem[]): GroupedModules {
     return acc
   }, {} as GroupedModules)
 }
+
+/**
+ * 将二维数组降维成一维数组，并过滤空值（如 undefined、null）
+ * @param array 二维数组
+ * @returns 一维数组
+ */
+export function flatten2DArray<T>(array: (T | T[])[]): T[] {
+  return array.flat().filter((item): item is T => item !== undefined && item !== null)
+}
+
+export function toQueryString(data: Record<string, any>): string {
+  return Object.entries(data)
+    .filter(([_, value]) => value !== undefined && value !== null)
+    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+    .join('&')
+}

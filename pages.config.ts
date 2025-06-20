@@ -20,7 +20,7 @@ export default defineUniPages({
   // 如果不需要tabBar，推荐使用 spa 模板。（pnpm create xxx -t spa）
   tabBar: {
     color: '#999999',
-    selectedColor: '#018d71',
+    selectedColor: '#cfcaa0',
     backgroundColor: '#F8F8F8',
     borderStyle: 'black',
     height: '50px',
@@ -29,14 +29,14 @@ export default defineUniPages({
     spacing: '3px',
     list: [
       {
-        iconPath: 'static/tabbar/home.png',
-        selectedIconPath: 'static/tabbar/homeHL.png',
+        iconPath: 'static/tabbar/home-unselect.png',
+        selectedIconPath: 'static/tabbar/home-select.png',
         pagePath: 'pages/index/index',
         text: '首页',
       },
       {
-        iconPath: 'static/tabbar/personal.png',
-        selectedIconPath: 'static/tabbar/personalHL.png',
+        iconPath: 'static/tabbar/mine-unselect.png',
+        selectedIconPath: 'static/tabbar/mine-select.png',
         pagePath: 'pages/mine/index',
         text: '我的',
       },

@@ -260,7 +260,7 @@ interface UploadFileOptions<T> {
  * @template T 上传成功后返回的数据类型
  * @param options 上传选项
  */
-function uploadFile<T>({
+export function uploadFile<T>({
   url,
   tempFilePath,
   formData,
@@ -292,8 +292,10 @@ function uploadFile<T>({
         try {
           // 解析响应数据
           const { data: _data } = JSON.parse(uploadFileRes.data)
+          console.log('上传成功:', _data)
+
           // 上传成功
-          data.value = _data as T
+          // data.value = _data as T
           onSuccess?.(_data)
         } catch (err) {
           // 响应解析错误

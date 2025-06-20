@@ -59,19 +59,23 @@ export const useUserStore = defineStore(
      * @returns R<IUserLogin>
      */
     const login = async (credentials: { mobile: string; code: string }) => {
-      try {
-        const res = await _login(credentials)
-        console.log('登录信息', res)
-        if (res.code === 200) {
-          let token = res.data.access_token
-          setUsreToken(token)
-          getUserInfo()
+      return new Promise(async (resolve, reject) => {
+        try {
+          const res = await _login(credentials)
+          console.log('登录信息', res)
+          if (res.code === 200) {
+            let token = res.data.access_token
+            setUsreToken(token)
+            getUserInfo()
+            resolve()
+          }
+          return res
+        } catch (error) {
+          console.log('登录失败', error)
+          Promise.reject(error)
+          reject(error)
         }
-        return res
-      } catch (error) {
-        console.log('登录失败', error)
-        Promise.reject(error)
-      }
+      })
     }
     /**
      * 获取用户信息
@@ -88,7 +92,7 @@ export const useUserStore = defineStore(
      * 退出登录 并 删除用户信息
      */
     const logout = async () => {
-      _logout()
+      // _logout()
       removeUserInfo()
     }
     /**

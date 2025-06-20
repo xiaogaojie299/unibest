@@ -1,7 +1,7 @@
 <route lang="json5">
 {
   style: {
-    navigationBarTitleText: '选择园区',
+    navigationBarTitleText: '选择空间载体',
   },
 }
 </route>
@@ -60,7 +60,7 @@
     </div>
     <view class="mt-4 px-3">
       <template v-if="list?.length">
-        <view v-for="item in list" :key="item.id">
+        <view v-for="item in list" :key="item.id" @click="handleClick(item)">
           <component-park-card :info="item"></component-park-card>
         </view>
       </template>
@@ -68,12 +68,27 @@
         <wd-status-tip image="content" tip="暂无内容" />
       </template>
     </view>
+    <wd-fab type="success" position="right-bottom" :expandable="false" v-if="visibleLocationBtn">
+      <template #trigger>
+        <wd-button @click="handleClickLocation" icon="location" type="success" size="small">
+          开启定位查看空间载体距离
+        </wd-button>
+      </template>
+    </wd-fab>
   </div>
 </template>
 <script lang="ts" setup>
 import { http } from '@/utils/http'
 import { addLevelField } from '@/utils/index'
 import ComponentParkCard from './components/ParkCard.vue'
+
+import { useSystemStore } from '@/store'
+import { storeToRefs } from 'pinia'
+
+const systemStore = useSystemStore()
+// const { SET_PARKNAME, SET_PARKID } = storeToRefs(systemStore)
+
+const visibleLocationBtn = ref(false)
 const state = reactive({
   name: '', // 园区名称
   countryId: '', // 国家ID
@@ -134,6 +149,28 @@ const onSearch = () => {
   console.log('搜索')
   getList()
 }
+
+const handleClick = (item) => {
+  if (item.id) {
+    console.log(systemStore.SET_PARKID(item.id))
+    systemStore.SET_PARKID(item.id)
+    systemStore.SET_PARKNAME(item.name)
+    uni.navigateBack()
+  }
+}
+
+const handleClickLocation = () => {
+  uni.openSetting({
+    success: (settingRes) => {
+      if (settingRes.authSetting['scope.userLocation']) {
+        getLocation()
+      } else {
+        uni.showToast({ title: '未开启权限', icon: 'none' })
+      }
+    },
+  })
+}
+
 const getareaAllTreeData = () => {
   http.post('/program/index/region-tree').then((res) => {
     let data = addLevelField(res.data)
@@ -187,6 +224,7 @@ const getLocation = () => {
       console.log('当前位置：', res)
       location.value.latitude = res.latitude
       location.value.longitude = res.longitude
+      visibleLocationBtn.value = false
 
       // 可选：通过逆地理编码获取地址信息
       // reverseGeocode(res.latitude, res.longitude)
@@ -194,6 +232,7 @@ const getLocation = () => {
     fail: (err) => {
       console.error('获取位置失败', err)
       uni.showToast({ title: '定位失败', icon: 'none' })
+      visibleLocationBtn.value = true
     },
   })
 }

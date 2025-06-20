@@ -66,4 +66,7 @@ image {
 .page-theme-bg {
   background-color: $uni-bg-color-grey;
 }
+.footer-btn {
+  padding-bottom: env(safe-area-inset-bottom);
+}
 </style>

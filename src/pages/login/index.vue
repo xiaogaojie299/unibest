@@ -44,16 +44,7 @@
             class="login-input captcha-input"
             :border="false"
             required
-          >
-            <template #suffix>
-              <image
-                class="captcha-image"
-                :src="'data:image/gif;base64,' + captcha.image"
-                mode="aspectFit"
-                @click="refreshCaptcha"
-              ></image>
-            </template>
-          </wd-input>
+          ></wd-input>
           <view class="input-bottom-line"></view>
         </view>
       </view>
@@ -72,7 +63,7 @@
         </wd-button>
         <!-- 微信小程序一键登录按钮 -->
         <!-- #ifdef MP-WEIXIN -->
-        <view class="divider">
+        <!-- <view class="divider">
           <view class="divider-line"></view>
           <view class="divider-text">或</view>
           <view class="divider-line"></view>
@@ -86,7 +77,7 @@
           class="wechat-login-btn"
         >
           微信一键登录
-        </wd-button>
+        </wd-button> -->
         <!-- #endif -->
       </view>
     </view>
@@ -122,7 +113,7 @@ const redirectRoute = ref('')
 
 // 获取环境变量
 const appTitle = ref(import.meta.env.VITE_APP_TITLE || 'Unibest Login')
-const appLogo = ref(import.meta.env.VITE_APP_LOGO || '/static/logo.svg')
+const appLogo = ref(import.meta.env.VITE_APP_LOGO || '/static/logo.jpg')
 
 // 初始化store
 const userStore = useUserStore()
@@ -163,7 +154,8 @@ const handleAccountLogin = async () => {
   }
   // 执行登录
   try {
-    await userStore.login(loginForm.value)
+    let resp = await userStore.login(loginForm.value)
+    console.log('resp', resp)
     // 跳转到首页或重定向页面
     const targetUrl = redirectRoute.value || '/pages/index/index'
     if (isTableBar(targetUrl)) {

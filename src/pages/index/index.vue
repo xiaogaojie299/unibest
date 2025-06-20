@@ -4,6 +4,7 @@
   style: {
     navigationStyle: 'custom',
     navigationBarTitleText: '首页',
+    enablePullDownRefresh: true,
   },
 }
 </route>
@@ -68,7 +69,7 @@
             <image
               class="label_13"
               referrerpolicy="no-referrer"
-              src="https://lanhu.oss-cn-beijing.aliyuncs.com/SketchPng3a72a1829aaa265f1cd956f9ded33d8e659ebb9d6a6320dced6111fccc045aa6"
+              src="@/static/images/index/chengguozhuanhua.png"
             />
             <text class="text-group_9">成果转化</text>
           </view>
@@ -76,7 +77,7 @@
             <image
               class="image_1"
               referrerpolicy="no-referrer"
-              src="https://lanhu.oss-cn-beijing.aliyuncs.com/SketchPnge416d98ee2b1d6c54083df5103057765d99d76051b5e7a834c1acff0ee6a54cc"
+              src="@/static/images/index/zhishichanquan.png"
             />
             <text class="text-group_10">知识产权</text>
           </view>
@@ -84,7 +85,7 @@
             <image
               class="label_8"
               referrerpolicy="no-referrer"
-              src="https://lanhu.oss-cn-beijing.aliyuncs.com/SketchPng5fb7f2c3599a470a06c07b9c7b1a252c2761cffaca2eec59431491534457e7db"
+              src="@/static/images/index/chuangyefudao.png"
             />
             <text class="text-group_11">创业辅导</text>
           </view>
@@ -112,7 +113,7 @@
               <image
                 class="label_10"
                 referrerpolicy="no-referrer"
-                src="https://lanhu.oss-cn-beijing.aliyuncs.com/SketchPng725ebd568e0c5340e945fc211c79b6e5908d8e5177f2634d126719be60c49c7d"
+                src="@/static/images/index/jingrongfuwu.png"
               />
               <text class="text-group_13">金融服务</text>
             </view>
@@ -120,7 +121,7 @@
               <image
                 class="label_15"
                 referrerpolicy="no-referrer"
-                src="https://lanhu.oss-cn-beijing.aliyuncs.com/SketchPng22276fe2e8f6d211108b5c87a600a75f4cae514e5859d115c0dc6738254a1301"
+                src="@/static/images/index/shichangduijie.png"
               />
               <text class="text-group_29">市场对接</text>
             </view>
@@ -128,7 +129,7 @@
               <image
                 class="label_16"
                 referrerpolicy="no-referrer"
-                src="https://lanhu.oss-cn-beijing.aliyuncs.com/SketchPng494968dbb549040b6c9ceebb7947009856667d7e3aded16efb42b16f737d2b43"
+                src="@/static/images/index/jianyanjiance.png"
               />
               <text class="text-group_30">检验检测</text>
             </view>
@@ -151,7 +152,7 @@
               <image
                 class="label_17"
                 referrerpolicy="no-referrer"
-                src="https://lanhu.oss-cn-beijing.aliyuncs.com/SketchPngfa434c2a9ad3b320ddd49d42e07c986baaafdc80cf96f7119db08f206b674f74"
+                src="@/static/images/index/falvfuwu.png"
               />
               <text class="text-group_32">法律服务</text>
             </view>
@@ -314,12 +315,12 @@
       </view>
       <view class="box_11 flex-col">
         <view class="block_15 flex-row justify-between" @click.stop="handleGoSelectPark">
-          <text class="text_20">请选择空间载体</text>
-          <image
-            class="thumbnail_18"
-            referrerpolicy="no-referrer"
-            src="https://lanhu.oss-cn-beijing.aliyuncs.com/SketchPng31a03cfb6ab0b9cc002deeafb1d168c2327c41b5cae2729c7b95620e76f9226b"
-          />
+          <view class="flex items-center">
+            <text class="text_20">{{ parkName || '请选择空间载体' }}</text>
+            <view class="rotate-90">
+              <wd-icon name="swap" size="18px"></wd-icon>
+            </view>
+          </view>
         </view>
         <view class="">
           <wd-search v-model="serchKey" placeholder-left placeholder="搜索" hide-cancel></wd-search>
@@ -331,22 +332,35 @@
   </view>
 </template>
 <script lang="ts" setup>
-const serchKey = ref('')
+import { useSystemStore } from '@/store/system'
+const systemStore = useSystemStore()
+import { http } from '@/utils/http'
 
+import { useMessage } from 'wot-design-uni'
+
+const parkName = computed(() => systemStore?.parkName)
+const parkId = computed(() => systemStore?.parkId)
+
+const serchKey = ref('')
+const message = useMessage()
+
+import hangyebaogao from '@/static/images/index/hangyebaogao.png'
+import baogongyongping from '@/static/images/index/bangongyongping.png'
+import chuangxingjifen from '@/static/images/index/chuangxingjifen.png'
+import chuangxingziyuan from '@/static/images/index/chuangxingziyuan.png'
+import kongjianchushou from '@/static/images/index/kongjianchushou.png'
+import ruzhufuwu from '@/static/images/index/ruzhufuwu.png'
+import kongjianpeitao from '@/static/images/index/kongjianpeitao.png'
 const loopData0 = [
   {
     lanhutext0: '公共服务',
-    lanhuimage0:
-      'https://lanhu.oss-cn-beijing.aliyuncs.com/SketchPngb543d61dd6b02ac1e55a37fee012db1a38eb76daad4a1ca1896ed7d130bdefe9',
+    lanhuimage0: hangyebaogao,
     lanhutext1: '行业报告',
-    lanhuimage1:
-      'https://lanhu.oss-cn-beijing.aliyuncs.com/SketchPnge2bcd378b612230ef1e9363a458cc40298715671b9b4e44843e9256b009a7139',
+    lanhuimage1: baogongyongping,
     lanhutext2: '办公用品',
-    lanhuimage2:
-      'https://lanhu.oss-cn-beijing.aliyuncs.com/SketchPng5d82cc1c3a1ae95ce7290a215dbcf17ae0d4d66be678d82341e47c68c36cdc1f',
+    lanhuimage2: chuangxingjifen,
     lanhutext3: '创新积分',
-    lanhuimage3:
-      'https://lanhu.oss-cn-beijing.aliyuncs.com/SketchPng719517b126731f56edddaed760fd99abaa5bbbaa2076b4aceae3e8504d275b47',
+    lanhuimage3: chuangxingziyuan,
     lanhutext4: '创新资源',
     lanhuimage4:
       'https://lanhu-dds-backend.oss-cn-beijing.aliyuncs.com/merge_image/imgs/4f99491f5f76488e8161d180cc8fba31_mergeImage.png',
@@ -354,17 +368,14 @@ const loopData0 = [
   },
   {
     lanhutext0: '空间服务',
-    lanhuimage0:
-      'https://lanhu.oss-cn-beijing.aliyuncs.com/SketchPngb47b912da71680d3524aeed39df3e629b6f731856b270ae1f3750891c2d87246',
+    lanhuimage0: kongjianchushou,
     lanhutext1: '空间出售',
-    lanhuimage1:
-      'https://lanhu.oss-cn-beijing.aliyuncs.com/SketchPngd90d06a21e83baea33fec2870b9d8704329c18c861c87dcdf89856345e3ce71d',
+    lanhuimage1: ruzhufuwu,
     lanhutext2: '入驻服务',
     lanhuimage2:
       'https://lanhu-dds-backend.oss-cn-beijing.aliyuncs.com/merge_image/imgs/ef672002a24e43808bc0593b2b0ceac9_mergeImage.png',
     lanhutext3: '约会议室',
-    lanhuimage3:
-      'https://lanhu.oss-cn-beijing.aliyuncs.com/SketchPng19aa30e069b49e824232ac8ef674ed844b37e51dfeeb465ff08ce43a1bada26d',
+    lanhuimage3: kongjianpeitao,
     lanhutext4: '空间配套',
     lanhuimage4:
       'https://lanhu-dds-backend.oss-cn-beijing.aliyuncs.com/merge_image/imgs/f7575a60c33a4f6ba3cf4a14c1fdaadb_mergeImage.png',
@@ -400,13 +411,49 @@ const handleGoSelectPark = () => {
     url: '/pages/park/change-park',
   })
 }
+
+const initData = () => {
+  if (!parkId.value) {
+    uni.navigateTo({ url: '/pages/park/change-park' })
+  }
+
+  http
+    .post('/program/index/get-user-org')
+    .then((resp) => {
+      console.log('resp', resp)
+      // 如果data为空，则跳转到选择园区页面
+      if (!resp.data) {
+        message
+          .confirm({
+            title: '您尚未加入任何组织，\n请先加入组织',
+            confirmButtonText: '加入组织',
+            cancelButtonText: '取消',
+          })
+          .then(() => {
+            uni.navigateTo({
+              url: `/pages/mine/org/join?pageType=index`,
+            })
+          })
+      }
+    })
+    .finally(() => {
+      uni.stopPullDownRefresh()
+    })
+}
+onPullDownRefresh(() => {
+  initData()
+})
+
+onShow(() => {
+  initData()
+})
 </script>
 <style lang="scss" scoped>
 @import '../../style/common.css';
 @import './index.rpx.css';
 ::v-deep {
   .wd-search {
-    background-color: transparent;
+    background-color: transparent !important;
   }
 }
 </style>

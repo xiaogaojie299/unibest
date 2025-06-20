@@ -3,6 +3,7 @@
   style: {
     navigationStyle: 'custom',
     navigationBarTitleText: '创新积分',
+    enablePullDownRefresh: true,
   },
 }
 </route>
@@ -15,6 +16,7 @@
       :bordered="false"
       custom-style="background-color: #cfcaa0 !important; border: none !important;"
       @click-left="handleClickLeft"
+      safeAreaInsetTop
     ></wd-navbar>
     <view class="header px-3">
       <!-- 头像和标签 -->
@@ -54,7 +56,6 @@ import { useMessage } from 'wot-design-uni'
 import { http } from '@/utils/http'
 import { storeToRefs } from 'pinia'
 import { useUserStore } from '@/store'
-
 // 使用storeToRefs解构userInfo
 const userStore = useUserStore()
 const { userInfo } = storeToRefs(userStore)
@@ -91,11 +92,14 @@ const handleClickLeft = () => {
 }
 
 const initData = () => {
-  console.log('initData', userInfo)
   http.post('/program/score/init', {
-    orgId: 0,
+    orgId: userInfo.orgId,
   })
 }
+
+onPullDownRefresh(() => {
+  initData()
+})
 
 onLoad(() => {
   initData()

@@ -472,7 +472,6 @@
   position: absolute;
   left: 0;
   top: 0;
-  width: 750rpx;
   height: 403.84615384615387rpx;
   padding-bottom: 94.23076923076923rpx;
 }
@@ -514,9 +513,7 @@
 }
 
 .group_7 {
-  width: 696.1538461538462rpx;
   align-self: center;
-  margin-top: 19.23076923076923rpx;
 }
 
 .image_7 {
@@ -566,7 +563,7 @@
 .thumbnail_19 {
   width: 13.461538461538462rpx;
   height: 23.076923076923077rpx;
-  margin: 42.30769230769231rpx 0 50rpx 275rpx;
+  margin: 42.30769230769231rpx 0 50rpx 40rpx;
 }
 
 .text-wrapper_2 {
