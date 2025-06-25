@@ -19,7 +19,18 @@
               <text class="text_1">{{ item.lanhutext0 }}</text>
             </view>
             <view class="box_13 flex-row">
-              <view class="image-text_29 flex-col">
+              <view
+                v-if="!index"
+                v-for="(icon, inx) in icons"
+                :key="inx"
+                style="margin-right: 30rpx"
+              >
+                <view class="image-text_29 flex-col" @click="handleGoScore(name)">
+                  <image class="label_1" referrerpolicy="no-referrer" :src="item.coverUrl" />
+                  <text class="text-group_2">{{ icon.name }}</text>
+                </view>
+              </view>
+              <view class="image-text_29 flex-col" v-else>
                 <image class="label_1" referrerpolicy="no-referrer" :src="item.lanhuimage0" />
                 <text class="text-group_2">{{ item.lanhutext1 }}</text>
               </view>
@@ -326,7 +337,15 @@
           <wd-search v-model="serchKey" placeholder-left placeholder="搜索" hide-cancel></wd-search>
         </view>
         <!-- <view class="section_6 flex-row"></view> -->
-        <view class="section_7 flex-col"></view>
+        <view class="section_7 flex-col">
+          <wd-swiper
+            :list="swiperList"
+            autoplay
+            v-model:current="current"
+            :indicator="{ type: 'dots-bar' }"
+            height="308rpx"
+          ></wd-swiper>
+        </view>
       </view>
     </view>
   </view>
@@ -337,12 +356,14 @@ const systemStore = useSystemStore()
 import { http } from '@/utils/http'
 
 import { useMessage } from 'wot-design-uni'
+import { useUserStore } from '@/store'
 
 const parkName = computed(() => systemStore?.parkName)
 const parkId = computed(() => systemStore?.parkId)
 
 const serchKey = ref('')
 const message = useMessage()
+const token = computed(() => useUserStore()?.userToken)
 
 import hangyebaogao from '@/static/images/index/hangyebaogao.png'
 import baogongyongping from '@/static/images/index/bangongyongping.png'
@@ -355,16 +376,6 @@ const loopData0 = [
   {
     lanhutext0: '公共服务',
     lanhuimage0: hangyebaogao,
-    lanhutext1: '行业报告',
-    lanhuimage1: baogongyongping,
-    lanhutext2: '办公用品',
-    lanhuimage2: chuangxingjifen,
-    lanhutext3: '创新积分',
-    lanhuimage3: chuangxingziyuan,
-    lanhutext4: '创新资源',
-    lanhuimage4:
-      'https://lanhu-dds-backend.oss-cn-beijing.aliyuncs.com/merge_image/imgs/4f99491f5f76488e8161d180cc8fba31_mergeImage.png',
-    lanhutext5: '股权投资',
   },
   {
     lanhutext0: '空间服务',
@@ -398,8 +409,10 @@ const loopData1 = [
 ]
 
 const constants = {}
-
-const handleGoScore = () => {
+const icons = ref([])
+const swiperList = ref([])
+const handleGoScore = (name) => {
+  if (name == '创新积分') return
   uni.navigateTo({
     url: '/pages/index/score/index',
   })
@@ -412,10 +425,32 @@ const handleGoSelectPark = () => {
   })
 }
 
+const getModuList = () => {
+  if (!parkId.value) return
+  http.post('/program/index/init', { parkId: parkId.value }).then((resp) => {
+    console.log('resp', resp)
+    icons.value = resp.data.icons
+    let swipers = [
+      'https://lanhu-dds-backend.oss-cn-beijing.aliyuncs.com/merge_image/imgs/f3a87ba2eca54b86aa6156d1d2a4222c_mergeImage.png',
+    ]
+    if (resp.data?.banners?.length > 0) {
+      swiperList.value = resp.data?.banners.map((v) => {
+        return v?.coverUrl
+      })
+    } else {
+      swiperList.value = swipers
+    }
+  })
+}
+
 const initData = () => {
+  getModuList()
+
   if (!parkId.value) {
     uni.navigateTo({ url: '/pages/park/change-park' })
   }
+
+  if (!token.value) return
 
   http
     .post('/program/index/get-user-org')
@@ -433,6 +468,9 @@ const initData = () => {
             uni.navigateTo({
               url: `/pages/mine/org/join?pageType=index`,
             })
+          })
+          .finally(() => {
+            uni.stopPullDownRefresh()
           })
       }
     })

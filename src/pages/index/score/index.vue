@@ -22,25 +22,25 @@
       <!-- 头像和标签 -->
       <view class="flex items-center pt-[40rpx] mb-5">
         <view>
-          <wd-img width="120rpx" height="120rpx" round />
+          <wd-img width="120rpx" height="120rpx" round :src="userInfo?.org?.logoUrl" />
         </view>
         <!-- 标签 -->
         <view class="ml-2">
-          <view class="font-weight mb-1">成都CCCC有限公司</view>
+          <view class="font-weight mb-1">{{ userInfo?.orgName || '-' }}</view>
           <view>
             <wd-tag class="mr-1" plain>标签</wd-tag>
           </view>
         </view>
       </view>
       <view class="textc-center text-white flex flex-col items-center justify-center">
-        <view class="font-weight font-size-10">94.3</view>
+        <view class="font-weight font-size-10">{{ detail.score }}</view>
         <view class="font-size-3">创新积分</view>
       </view>
     </view>
     <view class="page-theme-bg px-3 py-2 main">
       <h3 class="my-3">积分应用场景</h3>
       <view>
-        <wd-cell title="查看创新发展报告" is-link @click="confirm"></wd-cell>
+        <wd-cell title="查看创新发展报告" is-link></wd-cell>
         <view class="mb-3"></view>
         <wd-cell title="匹配科技金融产品" is-link @click="alert"></wd-cell>
         <view class="mb-3"></view>
@@ -61,6 +61,7 @@ const userStore = useUserStore()
 const { userInfo } = storeToRefs(userStore)
 
 const message = useMessage()
+const detail = ref({})
 
 function alert() {
   message.alert({
@@ -92,9 +93,20 @@ const handleClickLeft = () => {
 }
 
 const initData = () => {
-  http.post('/program/score/init', {
-    orgId: userInfo.orgId,
-  })
+  if (userStore.userInfo?.scoreSubmit == 1) {
+    confirm()
+  }
+
+  http
+    .post('/program/score/init', {
+      orgId: userInfo.orgId || 50,
+    })
+    .then((resp) => {
+      detail.value = resp.data
+    })
+    .finally(() => {
+      uni.stopPullDownRefresh()
+    })
 }
 
 onPullDownRefresh(() => {

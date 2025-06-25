@@ -28,17 +28,19 @@
           block
           @click="handleWechatLogin"
           class="wechat-login-btn"
+          open-type="getPhoneNumber"
+          @getphonenumber="onGetPhoneNumber"
         >
           微信用户一键登录
         </wd-button>
-        <button
+        <!-- <button
           class="wechat-login-btn"
           size="large"
           open-type="getPhoneNumber"
           @getphonenumber="onGetPhoneNumber"
         >
           授权手机号
-        </button>
+        </button> -->
       </view>
     </view>
     <!-- 隐私协议勾选 -->
@@ -83,7 +85,7 @@ const message = useMessage('wd-message-box-slot')
 const phoneNumber = ref<string | null>(null)
 // 获取环境变量
 const appTitle = ref(import.meta.env.VITE_APP_TITLE || 'Unibest Login')
-const appLogo = ref(import.meta.env.VITE_APP_LOGO || '/static/logo.svg')
+const appLogo = ref(import.meta.env.VITE_APP_LOGO || '/static/logo.jpg')
 
 // 初始化store
 const userStore = useUserStore()
@@ -193,6 +195,12 @@ const handleAgreement = (type: 'user' | 'privacy') => {
 </script>
 
 <style lang="scss" scoped>
+::v-deep {
+  .wd-checkbox.is-last-child {
+    display: flex;
+    align-items: center;
+  }
+}
 /* 验证码输入框样式 */
 .captcha-wrapper {
   .captcha-input {

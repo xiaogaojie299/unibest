@@ -135,17 +135,26 @@
       </view>
       <view class="group_5 flex-col">
         <view class="group_6 flex-row"></view>
-        <view class="group_7 flex-row mt-4 items-center" @click="handleGoEditUserInfo">
-          <image
-            class="image_7"
-            referrerpolicy="no-referrer"
-            :src="userInfo.avatar || '@/static/images/default-avatar.png'"
-          />
-          <view class="block_2 flex-col">
-            <text class="text_3">{{ userInfo.nickName || '-' }}</text>
-            <view class="image-text_18 flex-row justify-between">
-              <image class="thumbnail_18" referrerpolicy="no-referrer" :src="userInfo.avatar" />
-              <text class="text-group_18">{{ userInfo.orgName || '-' }}</text>
+        <view
+          class="group_7 mt-4 flex items-center justify-between w-full px-10"
+          @click="handleGoEditUserInfo"
+        >
+          <view class="flex items-center">
+            <image
+              class="image_7"
+              referrerpolicy="no-referrer"
+              :src="userInfo.avatar || '@/static/images/default-avatar.png'"
+            />
+            <view class="block_2 flex-col">
+              <text class="text_3">{{ userInfo.nickname || '-' }}</text>
+              <view class="image-text_18 flex-row" @click.stop="handleGoOrgPage">
+                <image
+                  class="thumbnail_18 mr-2"
+                  referrerpolicy="no-referrer"
+                  :src="userInfo.avatar"
+                />
+                <text class="text-group_18">{{ userInfo.orgName || '-' }}</text>
+              </view>
             </view>
           </view>
           <view>
@@ -173,19 +182,28 @@ const userStore = useUserStore()
 const { userInfo } = storeToRefs(userStore)
 const toast = useToast()
 const hasLogin = ref(false)
+const token = computed(() => useUserStore()?.userToken)
 
 onShow((options) => {
-  hasLogin.value = !!uni.getStorageSync('token')
-  console.log('个人中心onShow', hasLogin.value, options)
-
-  hasLogin.value && useUserStore().getUserInfo()
+  getUserInfo()
 })
+
+const getUserInfo = () => {
+  if (!token.value) return
+  userStore.getUserInfo()
+}
 
 const handleGoOrgPage = () => {
   uni.navigateTo({ url: '/pages/mine/org/index' })
 }
 const handleGoEditUserInfo = () => {
   uni.navigateTo({ url: '/pages/mine/edit-user-info' })
+}
+
+const handleDetail = () => {
+  uni.navigateTo({
+    url: `/pages/mine/org/detail?orgId=${userStore?.userInfo.orgId}`,
+  })
 }
 // #ifndef MP-WEIXIN
 // 上传头像
@@ -236,9 +254,6 @@ const onChooseAvatar = (e: any) => {
 // #endif
 // #ifdef MP-WEIXIN
 // 微信小程序下设置用户名
-const getUserInfo = (e: any) => {
-  console.log(e.detail)
-}
 // #endif
 
 // 个人资料

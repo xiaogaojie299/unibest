@@ -82,7 +82,8 @@ export const useUserStore = defineStore(
      */
     const getUserInfo = async () => {
       const res = await _getUserInfo()
-      const userInfo = res.data
+      const userInfo = { ...res.data, orgId: res.data?.org?.id, orgName: res.data?.org?.name }
+
       setUserInfo(userInfo)
       uni.setStorageSync('userInfo', userInfo)
       // TODO 这里可以增加获取用户路由的方法 根据用户的角色动态生成路由

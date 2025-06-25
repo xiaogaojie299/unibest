@@ -127,6 +127,7 @@ const handleClickOrgCard = (item) => {
 }
 
 const handleChangeMainOrg = (info) => {
+  console.log('info', info)
   if (!info.orgId || info.orgId === 'null') {
     return uni.showToast({ title: '组织ID不能为null', icon: 'none' })
   }

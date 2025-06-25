@@ -249,11 +249,11 @@ function handleSubmit() {
     return
   }
 
-  const params = { orgIndices: flatten2DArray(groupedData.value), orgId: userInfo?.orgId }
+  const params = { orgIndices: flatten2DArray(groupedData.value), orgId: userInfo?.orgId || 50 }
 
   console.log('params', params)
   // 提交
-  http.post('/program/score/save-org-index', { params }).then((resp) => {
+  http.post('/program/score/save-org-index', params).then((resp) => {
     uni.showToast({ title: '操作成功', icon: 'success' })
     uni.navigateBack()
   })

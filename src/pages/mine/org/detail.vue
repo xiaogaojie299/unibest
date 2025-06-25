@@ -137,9 +137,8 @@ const stepList = ref([
 ])
 
 const handleClickLeft = () => {
-  uni.navigateTo({
-    url: `/pages/mine/org/index`,
-  })
+  uni.navigateBack()
+  return
 }
 
 const getList = () => {

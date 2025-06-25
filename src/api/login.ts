@@ -31,7 +31,8 @@ export const login = (loginForm: ILoginForm) => {
  * 获取用户信息
  */
 export const getUserInfo = () => {
-  return http.post<IUserInfoVo>('/program/profile/user-info')
+  return http.post<IUserInfoVo>('/program/profile/index')
+  // return http.post<IUserInfoVo>('/program/profile/user-info')
 }
 
 /**
