@@ -13,159 +13,33 @@
     <view class="block_7 flex-col">
       <view class="group_11 flex-col">
         <view class="list_3 flex-col">
-          <view class="list-items_1 flex-col" v-for="(item, index) in loopData0" :key="index">
+          <view class="list-items_1 flex-col" v-for="(item, index) in modueList" :key="index">
             <view class="box_12 flex-row justify-between">
               <view class="box_2 flex-col"></view>
-              <text class="text_1">{{ item.lanhutext0 }}</text>
+              <text class="text_1">{{ item.title }}</text>
             </view>
-            <view class="box_13 flex-row">
-              <view
-                v-if="!index"
-                v-for="(icon, inx) in icons"
-                :key="inx"
-                style="margin-right: 30rpx"
-              >
-                <view class="image-text_29 flex-col" @click="handleGoScore(name)">
-                  <image class="label_1" referrerpolicy="no-referrer" :src="item.coverUrl" />
-                  <text class="text-group_2">{{ icon.name }}</text>
-                </view>
+            <view class="">
+              <view v-if="item.children.length > 0">
+                <!-- <view v-for="(icon, inx) in item.children" :key="inx" style="margin-right: 30rpx">
+                  <view class="image-text_29 flex-col" @click="handleGoScore(name)">
+                    <image class="label_1" referrerpolicy="no-referrer" :src="item.coverUrl" />
+                    <text class="text-group_2">{{ icon.name }}</text>
+                  </view>
+                </view> -->
+                <wd-grid border :column="5">
+                  <wd-grid-item
+                    v-for="(icon, inx) in item.children"
+                    :key="inx"
+                    icon="picture"
+                    :text="icon.name"
+                    @click.stop="handleGoScore(name)"
+                  />
+                </wd-grid>
               </view>
-              <view class="image-text_29 flex-col" v-else>
-                <image class="label_1" referrerpolicy="no-referrer" :src="item.lanhuimage0" />
-                <text class="text-group_2">{{ item.lanhutext1 }}</text>
+
+              <view v-else class="!flex !items-center justify-center" style="width: 100%">
+                <wd-status-tip image="content" tip="暂无内容" />
               </view>
-              <view class="image-text_30 flex-col">
-                <image class="label_2" referrerpolicy="no-referrer" :src="item.lanhuimage1" />
-                <text class="text-group_3">{{ item.lanhutext2 }}</text>
-              </view>
-              <view class="image-text_31 flex-col" @click="handleGoScore">
-                <image class="label_3" referrerpolicy="no-referrer" :src="item.lanhuimage2" />
-                <text class="text-group_4">{{ item.lanhutext3 }}</text>
-              </view>
-              <view class="image-text_32 flex-col">
-                <image class="label_4" referrerpolicy="no-referrer" :src="item.lanhuimage3" />
-                <text class="text-group_5">{{ item.lanhutext4 }}</text>
-              </view>
-              <view class="image-text_33 flex-col">
-                <image class="label_11" referrerpolicy="no-referrer" :src="item.lanhuimage4" />
-                <text class="text-group_6">{{ item.lanhutext5 }}</text>
-              </view>
-            </view>
-          </view>
-        </view>
-      </view>
-      <view class="box_3 flex-col">
-        <view class="block_8 flex-row">
-          <view class="box_4 flex-col"></view>
-          <text class="text_2">企业服务</text>
-          <view class="image-text_34 flex-row justify-between">
-            <text class="text-group_7">更多</text>
-            <image
-              class="thumbnail_2"
-              referrerpolicy="no-referrer"
-              src="https://lanhu.oss-cn-beijing.aliyuncs.com/SketchPng2e235c3319b933e886e0e0e50390d735d593c62793cafe7f3a825e2fa3ae40ea"
-            />
-          </view>
-        </view>
-        <view class="block_9 flex-row justify-end">
-          <view class="image-text_35 flex-col">
-            <image
-              class="label_12"
-              referrerpolicy="no-referrer"
-              src="https://lanhu-dds-backend.oss-cn-beijing.aliyuncs.com/merge_image/imgs/dd38316d3a794f1d8077ccaa7f18c3a7_mergeImage.png"
-            />
-            <text class="text-group_8">技术转移</text>
-          </view>
-          <view class="image-text_36 flex-col">
-            <image
-              class="label_13"
-              referrerpolicy="no-referrer"
-              src="@/static/images/index/chengguozhuanhua.png"
-            />
-            <text class="text-group_9">成果转化</text>
-          </view>
-          <view class="image-text_37 flex-col">
-            <image
-              class="image_1"
-              referrerpolicy="no-referrer"
-              src="@/static/images/index/zhishichanquan.png"
-            />
-            <text class="text-group_10">知识产权</text>
-          </view>
-          <view class="image-text_38 flex-col">
-            <image
-              class="label_8"
-              referrerpolicy="no-referrer"
-              src="@/static/images/index/chuangyefudao.png"
-            />
-            <text class="text-group_11">创业辅导</text>
-          </view>
-          <view class="image-text_39 flex-col">
-            <image
-              class="label_14"
-              referrerpolicy="no-referrer"
-              src="https://lanhu-dds-backend.oss-cn-beijing.aliyuncs.com/merge_image/imgs/e707112f2aa04194973fd327ac25519b_mergeImage.png"
-            />
-            <text class="text-group_12">政产学研</text>
-          </view>
-          <view class="image-wrapper_3 flex-row">
-            <image
-              class="label_14"
-              referrerpolicy="no-referrer"
-              :src="item.lanhuimage0"
-              v-for="(item, index) in loopData1"
-              :key="index"
-            />
-          </view>
-        </view>
-        <view class="block_10 flex-row">
-          <view class="group_12 flex-row">
-            <view class="image-text_40 flex-col">
-              <image
-                class="label_10"
-                referrerpolicy="no-referrer"
-                src="@/static/images/index/jingrongfuwu.png"
-              />
-              <text class="text-group_13">金融服务</text>
-            </view>
-            <view class="image-text_41 flex-col">
-              <image
-                class="label_15"
-                referrerpolicy="no-referrer"
-                src="@/static/images/index/shichangduijie.png"
-              />
-              <text class="text-group_29">市场对接</text>
-            </view>
-            <view class="image-text_42 flex-col">
-              <image
-                class="label_16"
-                referrerpolicy="no-referrer"
-                src="@/static/images/index/jianyanjiance.png"
-              />
-              <text class="text-group_30">检验检测</text>
-            </view>
-            <view class="image-text_43 flex-col">
-              <view class="image-wrapper_4 flex-col">
-                <image
-                  class="thumbnail_22"
-                  referrerpolicy="no-referrer"
-                  src="https://lanhu.oss-cn-beijing.aliyuncs.com/SketchPng9dc8081d0b776dbca692283ac747f4f140949930fcfd0485ab6edf8aa4df84e9"
-                />
-                <image
-                  class="thumbnail_23"
-                  referrerpolicy="no-referrer"
-                  src="https://lanhu-dds-backend.oss-cn-beijing.aliyuncs.com/merge_image/imgs/6559500b6f3646648c49e94593a35f16_mergeImage.png"
-                />
-              </view>
-              <text class="text-group_31">技术创新</text>
-            </view>
-            <view class="image-text_44 flex-col">
-              <image
-                class="label_17"
-                referrerpolicy="no-referrer"
-                src="@/static/images/index/falvfuwu.png"
-              />
-              <text class="text-group_32">法律服务</text>
             </view>
           </view>
         </view>
@@ -364,7 +238,23 @@ const parkId = computed(() => systemStore?.parkId)
 const serchKey = ref('')
 const message = useMessage()
 const token = computed(() => useUserStore()?.userToken)
-
+const modueList = ref([
+  {
+    title: '公共服务',
+    type: 1,
+    children: [],
+  },
+  {
+    title: '空间服务',
+    children: [],
+    type: 2,
+  },
+  {
+    title: '企业服务',
+    children: [],
+    type: 3,
+  },
+])
 import hangyebaogao from '@/static/images/index/hangyebaogao.png'
 import baogongyongping from '@/static/images/index/bangongyongping.png'
 import chuangxingjifen from '@/static/images/index/chuangxingjifen.png'
@@ -429,7 +319,34 @@ const getModuList = () => {
   if (!parkId.value) return
   http.post('/program/index/init', { parkId: parkId.value }).then((resp) => {
     console.log('resp', resp)
-    icons.value = resp.data.icons
+    let iconList = resp.data.icons
+    modueList.value = [
+      {
+        title: '公共服务',
+        type: 1,
+        children: [],
+      },
+      {
+        title: '空间服务',
+        children: [],
+        type: 2,
+      },
+      {
+        title: '企业服务',
+        children: [],
+        type: 3,
+      },
+    ]
+
+    iconList.map((v) => {
+      if (v.type == 1) {
+        modueList.value[0].children.push(v)
+      } else if (v.type == 2) {
+        modueList.value[1].children.push(v)
+      } else if (v.type == 3) {
+        modueList.value[2].children.push(v)
+      }
+    })
     let swipers = [
       'https://lanhu-dds-backend.oss-cn-beijing.aliyuncs.com/merge_image/imgs/f3a87ba2eca54b86aa6156d1d2a4222c_mergeImage.png',
     ]
