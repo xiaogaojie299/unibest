@@ -49,6 +49,21 @@
       }
     },
     {
+      "path": "pages/index/function-description",
+      "type": "home",
+      "style": {
+        "navigationBarTitleText": "功能说明"
+      }
+    },
+    {
+      "path": "pages/index/empty",
+      "type": "home",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": ""
+      }
+    },
+    {
       "path": "pages/about/about",
       "type": "page",
       "style": {

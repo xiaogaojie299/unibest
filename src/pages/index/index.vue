@@ -32,7 +32,7 @@
                     :key="inx"
                     icon="picture"
                     :text="icon.name"
-                    @click.stop="handleGoScore(name)"
+                    @click.stop="handleGoScore(icon)"
                   />
                 </wd-grid>
               </view>
@@ -228,6 +228,7 @@
 import { useSystemStore } from '@/store/system'
 const systemStore = useSystemStore()
 import { http } from '@/utils/http'
+import { toQueryString } from '@/utils/index'
 
 import { useMessage } from 'wot-design-uni'
 import { useUserStore } from '@/store'
@@ -301,11 +302,36 @@ const loopData1 = [
 const constants = {}
 const icons = ref([])
 const swiperList = ref([])
-const handleGoScore = (name) => {
-  if (name == '创新积分') return
-  uni.navigateTo({
-    url: '/pages/index/score/index',
+const handleGoScore = async (icon) => {
+  if (icon?.name == '创新积分') {
+    let getLoginStatus = await isLogin()
+    if (!getLoginStatus) return
+
+    return uni.navigateTo({
+      url: '/pages/index/score/index',
+    })
+  }
+
+  if (icon?.name == '政策匹配') {
+    getIsJoinOrg()
+    return
+  }
+
+  if (icon.jumpType === 8) {
+    let params = {
+      iconId: icon.id,
+      remark: icon.remark,
+    }
+    // 如果跳转到功能说明
+    return uni.navigateTo({
+      url: `/pages/index/function-description?${toQueryString(params)}`,
+    })
+  }
+
+  return uni.navigateTo({
+    url: `/pages/index/empty?title=${icon.name}`,
   })
+  // 功能说明  Function description
 }
 
 const handleGoSelectPark = () => {
@@ -317,45 +343,97 @@ const handleGoSelectPark = () => {
 
 const getModuList = () => {
   if (!parkId.value) return
-  http.post('/program/index/init', { parkId: parkId.value }).then((resp) => {
-    console.log('resp', resp)
-    let iconList = resp.data.icons
-    modueList.value = [
-      {
-        title: '公共服务',
-        type: 1,
-        children: [],
-      },
-      {
-        title: '空间服务',
-        children: [],
-        type: 2,
-      },
-      {
-        title: '企业服务',
-        children: [],
-        type: 3,
-      },
-    ]
+  http
+    .post('/program/index/init', { parkId: parkId.value })
+    .then((resp) => {
+      console.log('resp', resp)
+      let iconList = resp.data.icons
+      modueList.value = [
+        {
+          title: '公共服务',
+          type: 1,
+          children: [],
+        },
+        {
+          title: '空间服务',
+          children: [],
+          type: 2,
+        },
+        {
+          title: '企业服务',
+          children: [],
+          type: 3,
+        },
+      ]
 
-    iconList.map((v) => {
-      if (v.type == 1) {
-        modueList.value[0].children.push(v)
-      } else if (v.type == 2) {
-        modueList.value[1].children.push(v)
-      } else if (v.type == 3) {
-        modueList.value[2].children.push(v)
+      iconList.map((v) => {
+        if (v.type == 1) {
+          modueList.value[0].children.push(v)
+        } else if (v.type == 2) {
+          modueList.value[1].children.push(v)
+        } else if (v.type == 3) {
+          modueList.value[2].children.push(v)
+        }
+      })
+      let swipers = [
+        'https://lanhu-dds-backend.oss-cn-beijing.aliyuncs.com/merge_image/imgs/f3a87ba2eca54b86aa6156d1d2a4222c_mergeImage.png',
+      ]
+      if (resp.data?.banners?.length > 0) {
+        swiperList.value = resp.data?.banners.map((v) => {
+          return v?.coverUrl
+        })
+      } else {
+        swiperList.value = swipers
       }
     })
-    let swipers = [
-      'https://lanhu-dds-backend.oss-cn-beijing.aliyuncs.com/merge_image/imgs/f3a87ba2eca54b86aa6156d1d2a4222c_mergeImage.png',
-    ]
-    if (resp.data?.banners?.length > 0) {
-      swiperList.value = resp.data?.banners.map((v) => {
-        return v?.coverUrl
-      })
-    } else {
-      swiperList.value = swipers
+    .finally(() => {
+      uni.stopPullDownRefresh()
+    })
+}
+
+const isLogin = () => {
+  return new Promise((resolve, reject) => {
+    if (!token.value) {
+      message
+        .confirm({
+          title: '您尚未登录，请先登录',
+          confirmButtonText: '去登录',
+          cancelButtonText: '取消',
+        })
+        .then(() => {
+          uni.navigateTo({
+            url: '/pages/login/index',
+          })
+        })
+        .finally(() => {
+          resolve(false)
+        })
+    }
+  })
+}
+
+const getIsJoinOrg = async () => {
+  let getLoginStatus = await isLogin()
+  if (!getLoginStatus) return
+
+  http.post('/program/index/get-user-org').then((resp) => {
+    console.log('resp', resp)
+    // 如果data为空，则跳转到选择园区页面
+    if (!resp.data) {
+      message
+        .confirm({
+          title: '您尚未加入任何组织，\n请先加入组织',
+          confirmButtonText: '加入组织',
+          cancelButtonText: '取消',
+        })
+        .then(() => {
+          uni.navigateTo({
+            url: `/pages/mine/org/join?pageType=index`,
+          })
+        })
+        .finally(() => {
+          uni.stopPullDownRefresh()
+        })
     }
   })
 }
@@ -366,34 +444,6 @@ const initData = () => {
   if (!parkId.value) {
     uni.navigateTo({ url: '/pages/park/change-park' })
   }
-
-  if (!token.value) return
-
-  http
-    .post('/program/index/get-user-org')
-    .then((resp) => {
-      console.log('resp', resp)
-      // 如果data为空，则跳转到选择园区页面
-      if (!resp.data) {
-        message
-          .confirm({
-            title: '您尚未加入任何组织，\n请先加入组织',
-            confirmButtonText: '加入组织',
-            cancelButtonText: '取消',
-          })
-          .then(() => {
-            uni.navigateTo({
-              url: `/pages/mine/org/join?pageType=index`,
-            })
-          })
-          .finally(() => {
-            uni.stopPullDownRefresh()
-          })
-      }
-    })
-    .finally(() => {
-      uni.stopPullDownRefresh()
-    })
 }
 onPullDownRefresh(() => {
   initData()
