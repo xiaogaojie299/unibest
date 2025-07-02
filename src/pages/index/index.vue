@@ -26,13 +26,14 @@
                     <text class="text-group_2">{{ icon.name }}</text>
                   </view>
                 </view> -->
-                <wd-grid border :column="5">
+                <wd-grid border :column="5" clickable>
                   <wd-grid-item
                     v-for="(icon, inx) in item.children"
                     :key="inx"
                     icon="picture"
                     :text="icon.name"
-                    @click.stop="handleGoScore(icon)"
+                    clickable
+                    @itemclick="handleGoScore(icon)"
                   />
                 </wd-grid>
               </view>
@@ -303,6 +304,8 @@ const constants = {}
 const icons = ref([])
 const swiperList = ref([])
 const handleGoScore = async (icon) => {
+  console.log('handleGoScore')
+
   if (icon?.name == '创新积分') {
     let getLoginStatus = await isLogin()
     if (!getLoginStatus) return
