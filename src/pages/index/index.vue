@@ -308,19 +308,21 @@ const handleGoScore = async (icon) => {
 
   if (icon?.name == '创新积分') {
     let getLoginStatus = await isLogin()
-    if (!getLoginStatus) return
-
-    return uni.navigateTo({
-      url: '/pages/index/score/index',
+    if (!!getLoginStatus) {
+      getIsJoinOrg(() => {
+        uni.navigateTo({
+          url: '/pages/index/score/index',
+        })
+      })
+    }
+  } else if (icon?.name == '政策匹配') {
+    getIsJoinOrg(() => {
+      uni.navigateTo({
+        url: `/pages/index/empty?title=${icon.name}`,
+      })
     })
-  }
-
-  if (icon?.name == '政策匹配') {
-    getIsJoinOrg()
     return
-  }
-
-  if (icon.jumpType === 8) {
+  } else if (icon.jumpType === 8) {
     let params = {
       iconId: icon.id,
       remark: icon.remark,
@@ -329,12 +331,11 @@ const handleGoScore = async (icon) => {
     return uni.navigateTo({
       url: `/pages/index/function-description?${toQueryString(params)}`,
     })
+  } else {
+    return uni.navigateTo({
+      url: `/pages/index/empty?title=${icon.name}`,
+    })
   }
-
-  return uni.navigateTo({
-    url: `/pages/index/empty?title=${icon.name}`,
-  })
-  // 功能说明  Function description
 }
 
 const handleGoSelectPark = () => {
@@ -411,33 +412,37 @@ const isLogin = () => {
         .finally(() => {
           resolve(false)
         })
+    } else {
+      resolve(true)
     }
   })
 }
 
-const getIsJoinOrg = async () => {
+const getIsJoinOrg = async (callback) => {
   let getLoginStatus = await isLogin()
   if (!getLoginStatus) return
-
-  http.post('/program/index/get-user-org').then((resp) => {
-    console.log('resp', resp)
-    // 如果data为空，则跳转到选择园区页面
-    if (!resp.data) {
-      message
-        .confirm({
-          title: '您尚未加入任何组织，\n请先加入组织',
-          confirmButtonText: '加入组织',
-          cancelButtonText: '取消',
-        })
-        .then(() => {
-          uni.navigateTo({
-            url: `/pages/mine/org/join?pageType=index`,
+  return new Promise((resolve, reject) => {
+    http.post('/program/index/get-user-org').then((resp) => {
+      // 如果data为空，则跳转到选择园区页面
+      if (!resp.data) {
+        message
+          .confirm({
+            title: '您尚未加入任何组织，\n请先加入组织',
+            confirmButtonText: '加入组织',
+            cancelButtonText: '取消',
           })
-        })
-        .finally(() => {
-          uni.stopPullDownRefresh()
-        })
-    }
+          .then(() => {
+            uni.navigateTo({
+              url: `/pages/mine/org/join?pageType=index`,
+            })
+          })
+          .finally(() => {
+            uni.stopPullDownRefresh()
+          })
+      } else {
+        callback && callback()
+      }
+    })
   })
 }
 

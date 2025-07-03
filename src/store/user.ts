@@ -11,6 +11,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { toast } from '@/utils/toast'
 import { IUserInfoVo } from '@/api/login.typings'
+import { http } from '@/utils/http'
 
 // 初始化状态
 const userInfoState: IUserInfoVo = {
@@ -26,6 +27,7 @@ export const useUserStore = defineStore(
     // 定义用户信息
     const userInfo = ref<IUserInfoVo>({ ...userInfoState })
     const userToken = ref(getToken())
+    const profile = ref({ ...userInfoState })
     // 设置用户信息
     const setUserInfo = (val: IUserInfoVo) => {
       // 若头像为空 则使用默认头像
@@ -35,6 +37,10 @@ export const useUserStore = defineStore(
         val.avatar = 'https://oss.laf.run/ukw0y1-site/avatar.jpg?feige'
       }
       userInfo.value = val
+    }
+
+    const setProfile = (val: IUserInfoVo) => {
+      profile.value = val
     }
 
     const setUsreToken = (token: string) => {
@@ -49,9 +55,12 @@ export const useUserStore = defineStore(
     }
     // 删除用户信息
     const removeUserInfo = () => {
-      userInfo.value = { ...userInfoState }
+      // userInfo.value = { ...userInfoState }
+      setUsreToken('')
       uni.removeStorageSync('userInfo')
+      uni.removeStorageSync('user')
       uni.removeStorageSync('token')
+      uni.removeStorageSync('CACHE_XINDUKECHUANG_TOKEN')
     }
     /**
      * 用户登录
@@ -83,9 +92,14 @@ export const useUserStore = defineStore(
     const getUserInfo = async () => {
       const res = await _getUserInfo()
       const userInfo = { ...res.data, orgId: res.data?.org?.id, orgName: res.data?.org?.name }
+      http.post('/program/profile/user-info').then((res) => {
+        console.log('用户信息', res.data)
+        userInfo.phonenumber = res.data.phonenumber
 
-      setUserInfo(userInfo)
-      uni.setStorageSync('userInfo', userInfo)
+        setUserInfo(userInfo)
+        uni.setStorageSync('userInfo', userInfo)
+      })
+
       // TODO 这里可以增加获取用户路由的方法 根据用户的角色动态生成路由
       return res
     }
