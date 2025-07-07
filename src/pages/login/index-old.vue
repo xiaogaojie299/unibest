@@ -156,7 +156,9 @@ const handleAccountLogin = async () => {
     // 跳转到首页或重定向页面
     const targetUrl = redirectRoute.value || '/pages/index/index'
     if (isTableBar(targetUrl)) {
-      uni.switchTab({ url: targetUrl })
+      uni.reLaunch({
+        url: targetUrl,
+      })
     } else {
       uni.redirectTo({ url: targetUrl })
     }

@@ -46,7 +46,7 @@
         <view class="mb-3"></view>
         <wd-cell title="匹配科技支持政策" is-link @click="alert"></wd-cell>
         <view class="mb-3"></view>
-        <wd-cell title="加入创始人俱乐部" is-link @click="alert"></wd-cell>
+        <wd-cell title="加入创始人俱乐部" is-link @click="test"></wd-cell>
       </view>
     </view>
   </view>
@@ -62,11 +62,17 @@ const { userInfo } = storeToRefs(userStore)
 
 const message = useMessage()
 const detail = ref({})
-
+const pageType = ref('')
 function alert() {
   message.alert({
     msg: '功能升级中，敬请期待',
     title: '',
+  })
+}
+
+function test() {
+  uni.navigateTo({
+    url: '/pages/index/prefect-org/index',
   })
 }
 function confirm() {
@@ -89,20 +95,26 @@ function confirm() {
 }
 
 const handleClickLeft = () => {
-  uni.navigateBack()
+  if (pageType.value === 'home') {
+    uni.reLaunch({
+      url: '/pages/index/index',
+    })
+  } else {
+    uni.navigateBack()
+  }
 }
 
 const initData = () => {
-  if (userStore.userInfo?.scoreSubmit == 1) {
-    confirm()
-  }
-
   http
     .post('/program/score/init', {
-      orgId: userInfo.orgId || 50,
+      orgId: userStore.userInfo?.orgId,
     })
     .then((resp) => {
       detail.value = resp.data
+      console.log('detail', detail.value)
+      if (detail.value.submitStatus == 1) {
+        confirm()
+      }
     })
     .finally(() => {
       uni.stopPullDownRefresh()
@@ -113,8 +125,9 @@ onPullDownRefresh(() => {
   initData()
 })
 
-onLoad(() => {
+onLoad((options) => {
   initData()
+  pageType.value = options.type
 })
 </script>
 <style lang="scss" scoped>

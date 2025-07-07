@@ -133,6 +133,16 @@
                     />
                   </wd-cell>
                 </view>
+                <!-- 净资产负债率 -->
+                <view v-else-if="item.configKey === 55">
+                  <wd-cell :title="item.label" required vertical>
+                    <wd-radio-group shape="dot" v-model="item.submitValue" inline>
+                      <wd-radio value="1">0%-50%（不含50%）</wd-radio>
+                      <wd-radio value="2">50%-80%（不含80%）</wd-radio>
+                      <wd-radio value="3">大于80%</wd-radio>
+                    </wd-radio-group>
+                  </wd-cell>
+                </view>
               </view>
               <!-- <view v-else-if="item.fieldType == 2">
               <wd-cell :title="`${index + 1}.${item.name}`" required vertical>
@@ -229,10 +239,14 @@ const breakFaithOptions = [
 ]
 // 1=守信组织，2=信用异常组织，3=一般失信组织，4=严重失信组织
 const executionerOptions = [
-  { label: '守信组织', value: 0 },
-  { label: '信用异常组织', value: 1 },
-  { label: '一般失信组织', value: 2 },
-  { label: '严重失信组织', value: 3 },
+  { label: '存续', value: 1 },
+  { label: '在业', value: 2 },
+  { label: '吊销', value: 3 },
+  { label: '注销', value: 4 },
+  { label: '迁入', value: 5 },
+  { label: '迁出', value: 6 },
+  { label: '停业', value: 7 },
+  { label: '清算', value: 8 },
 ]
 
 const handleConfirmBreakFaith = ({ value, selectedItems }) => {
@@ -249,13 +263,18 @@ function handleSubmit() {
     return
   }
 
-  const params = { orgIndices: flatten2DArray(groupedData.value), orgId: userInfo?.orgId || 50 }
+  const params = {
+    orgIndices: flatten2DArray(groupedData.value),
+    orgId: userInfo?.value?.orgId,
+  }
 
   console.log('params', params)
   // 提交
   http.post('/program/score/save-org-index', params).then((resp) => {
     uni.showToast({ title: '操作成功', icon: 'success' })
-    uni.navigateBack()
+    uni.navigateTo({
+      url: '/pages/index/prefect-org/callback',
+    })
   })
 }
 
@@ -264,7 +283,7 @@ function prevStep() {
   active.value = active.value - 1
 }
 const getList = () => {
-  http.post('/program/score/get-org-index', { orgId: 0 }).then((res) => {
+  http.post('/program/score/get-org-index', { orgId: userInfo?.value?.orgId }).then((res) => {
     let resData = res.data.map((v) => {
       return {
         ...v,

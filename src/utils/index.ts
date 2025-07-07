@@ -342,3 +342,15 @@ export function toQueryString(data: Record<string, any>): string {
     .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
     .join('&')
 }
+
+/**
+ * 安全跳转函数，避免页面栈溢出
+ */
+export const safeNavigateTo = (url: any) => {
+  const pages = getCurrentPages()
+  if (pages.length >= 9) {
+    uni.redirectTo(url)
+  } else {
+    uni.navigateTo(url)
+  }
+}

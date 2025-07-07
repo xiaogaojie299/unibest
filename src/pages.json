@@ -133,6 +133,13 @@
       }
     },
     {
+      "path": "pages/index/prefect-org/callback",
+      "type": "page",
+      "style": {
+        "navigationBarTitleText": "完善组织信息"
+      }
+    },
+    {
       "path": "pages/index/prefect-org/index",
       "type": "page",
       "style": {

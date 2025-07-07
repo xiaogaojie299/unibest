@@ -93,14 +93,10 @@ const handleClickLeft = () => {
   }
 
   if (pageType.value === 'index') {
-    return uni.switchTab({
-      url: '/pages/index/index',
+    return uni.reLaunch({
+      url: `/pages/index/index`,
     })
   }
-
-  uni.redirectTo({
-    url: '/pages/mine/org/index',
-  })
 }
 
 const handleSubmit = () => {
